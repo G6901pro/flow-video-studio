@@ -14,7 +14,260 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_usage: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+          words: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+          words: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+          words?: number
+        }
+        Relationships: []
+      }
+      conversations: {
+        Row: {
+          created_at: string
+          id: string
+          mode: string
+          model: string
+          pinned: boolean
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mode?: string
+          model?: string
+          pinned?: boolean
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mode?: string
+          model?: string
+          pinned?: boolean
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      generations: {
+        Row: {
+          aspect: string | null
+          created_at: string
+          duration: number | null
+          id: string
+          image_url: string
+          kind: string
+          model: string
+          prompt: string
+          resolution: string
+          style: string | null
+          user_id: string
+        }
+        Insert: {
+          aspect?: string | null
+          created_at?: string
+          duration?: number | null
+          id?: string
+          image_url: string
+          kind?: string
+          model: string
+          prompt: string
+          resolution?: string
+          style?: string | null
+          user_id: string
+        }
+        Update: {
+          aspect?: string | null
+          created_at?: string
+          duration?: number | null
+          id?: string
+          image_url?: string
+          kind?: string
+          model?: string
+          prompt?: string
+          resolution?: string
+          style?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          model: string | null
+          provider: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          model?: string | null
+          provider?: string | null
+          role: string
+          user_id?: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          model?: string | null
+          provider?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          onboarded: boolean
+          primary_goal: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          onboarded?: boolean
+          primary_goal?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          onboarded?: boolean
+          primary_goal?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          current_period_end: string | null
+          plan: string
+          status: string
+          stripe_customer_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          current_period_end?: string | null
+          plan?: string
+          status?: string
+          stripe_customer_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          current_period_end?: string | null
+          plan?: string
+          status?: string
+          stripe_customer_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      usage_events: {
+        Row: {
+          created_at: string
+          credits: number
+          id: string
+          kind: string
+          model: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits: number
+          id?: string
+          kind: string
+          model: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits?: number
+          id?: string
+          kind?: string
+          model?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      video_jobs: {
+        Row: {
+          aspect: string
+          created_at: string
+          duration: number
+          error: string | null
+          generation_id: string | null
+          id: string
+          prompt: string
+          resolution: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          aspect: string
+          created_at?: string
+          duration: number
+          error?: string | null
+          generation_id?: string | null
+          id: string
+          prompt: string
+          resolution?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          aspect?: string
+          created_at?: string
+          duration?: number
+          error?: string | null
+          generation_id?: string | null
+          id?: string
+          prompt?: string
+          resolution?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
