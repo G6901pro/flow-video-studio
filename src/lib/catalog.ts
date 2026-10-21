@@ -171,6 +171,33 @@ export const VIDEO_MAX_SECONDS = 10;
 export const VIDEO_MIN_SECONDS = 3;
 export const ASPECT_RATIOS = ["1:1", "16:9", "9:16", "4:3", "3:2", "2:3"] as const;
 export type AspectRatio = (typeof ASPECT_RATIOS)[number];
+
+/** Render quality tiers offered in the video studio. */
+export const VIDEO_RESOLUTIONS = ["720p", "1080p", "2k", "4k"] as const;
+export type VideoResolution = (typeof VIDEO_RESOLUTIONS)[number];
+export const RESOLUTION_LABELS: Record<VideoResolution, string> = {
+  "720p": "720p HD",
+  "1080p": "1080p Full HD",
+  "2k": "2K",
+  "4k": "4K Ultra HD",
+};
+export const PREMIUM_RESOLUTIONS: readonly VideoResolution[] = ["2k", "4k"];
+/** Free plan may render at most this many Full HD videos per day. */
+export const FREE_FHD_DAILY_LIMIT = 2;
+
+export function canUseResolution(plan: PlanId, resolution: VideoResolution): boolean {
+  return plan !== "free" || !PREMIUM_RESOLUTIONS.includes(resolution);
+}
+
+/** True when a free-plan user has used up their daily Full HD video allowance. */
+export function fhdQuotaReached(count: number, plan: PlanId): boolean {
+  return plan === "free" && count >= FREE_FHD_DAILY_LIMIT;
+}
+
+/** Native tier the gateway renders each selection at (2K renders at the 4K tier). */
+export function nativeResolution(resolution: VideoResolution): "720p" | "1080p" | "4k" {
+  return resolution === "2k" || resolution === "4k" ? "4k" : resolution;
+}
 /** Video supports only landscape or portrait output; map other ratios to the nearest. */
 export function videoAspect(a: AspectRatio): "16:9" | "9:16" {
   return a === "9:16" || a === "2:3" ? "9:16" : "16:9";
