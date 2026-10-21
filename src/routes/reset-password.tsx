@@ -1,0 +1,10 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { Logo } from "@/components/brand/Logo";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+import { workspaceHead } from "@/lib/workspace";
+export const Route = createFileRoute("/reset-password")({ head: () => workspaceHead("Reset password", "Set a new password for your Xenix AI account."), component: ResetPassword });
+function ResetPassword() { const [password, setPassword] = useState(""); const [confirm, setConfirm] = useState(""); const [busy, setBusy] = useState(false); const [error, setError] = useState<string | null>(null); const navigate = useNavigate(); return <main className="flex min-h-dvh items-center justify-center px-5"><form className="w-full max-w-sm space-y-4" onSubmit={async (e) => { e.preventDefault(); setError(null); if (password !== confirm) { setError("Passwords do not match."); return; } setBusy(true); const { data } = await supabase.auth.getUser(); if (!data.user) { setError("This reset link is invalid or has expired. Request a new one."); setBusy(false); return; } const { error } = await supabase.auth.updateUser({ password }); setBusy(false); if (error) setError("Could not update your password. Request a new reset link."); else navigate({ to: "/app" }); }}><Logo /><h1 className="pt-4 text-2xl font-semibold">Set a new password</h1><Label htmlFor="newPassword">New password</Label><Input id="newPassword" type="password" autoComplete="new-password" minLength={8} required value={password} onChange={(e) => setPassword(e.target.value)} /><Label htmlFor="confirmPassword">Confirm password</Label><Input id="confirmPassword" type="password" autoComplete="new-password" minLength={8} required value={confirm} onChange={(e) => setConfirm(e.target.value)} /><Button className="w-full" disabled={busy}>{busy ? "Saving…" : "Update password"}</Button>{error && <p role="alert" className="text-sm text-destructive">{error}</p>}</form></main>; }

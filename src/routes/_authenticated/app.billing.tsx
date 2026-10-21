@@ -1,0 +1,10 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { CreditCard } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { getUsage } from "@/lib/ai.functions";
+import { PLANS } from "@/lib/catalog";
+import { workspaceHead } from "@/lib/workspace";
+export const Route = createFileRoute("/_authenticated/app/billing")({ head: () => workspaceHead("Subscription & Billing", "Review your Xenix AI plan and billing availability."), component: BillingPage });
+function BillingPage() { const fn = useServerFn(getUsage); const usage = useQuery({ queryKey: ["usage"], queryFn: () => fn() }); return <section className="mx-auto max-w-5xl px-5 py-8 md:px-10"><p className="mb-2 text-xs uppercase tracking-widest text-cyan">Your subscription</p><h1 className="text-3xl font-semibold">Subscription & Billing</h1><div className="my-8 flex items-start gap-3 border-y border-border py-6"><CreditCard className="size-5 shrink-0 text-warning" /><div><h2 className="text-sm font-semibold">Payments are not connected</h2><p className="mt-2 text-sm text-muted-foreground">Checkout and subscription changes are unavailable. No payment will be taken.</p></div></div>{usage.error && <p role="alert">{usage.error.message}</p>}<div className="grid gap-5 lg:grid-cols-3">{Object.values(PLANS).map((p) => <article key={p.id} className={`rounded-lg border p-6 ${p.id === "pro" ? "border-cyan/40 bg-cyan/5" : "border-border"}`}><h2 className="font-semibold">{p.name}</h2><p className="my-5 text-3xl font-semibold">{p.priceLabel}<span className="ml-1 text-xs font-normal text-muted-foreground">{p.id !== "enterprise" && "/month"}</span></p><ul className="min-h-40 space-y-3 text-sm text-muted-foreground">{p.features.map((f) => <li key={f}>{f}</li>)}</ul><Button className="mt-6 w-full" variant={p.id === "pro" ? "default" : "outline"} disabled>{usage.data?.plan === p.id ? "Current plan" : "Not available yet"}</Button></article>)}</div></section>; }
