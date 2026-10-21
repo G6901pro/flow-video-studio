@@ -1,0 +1,10 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Logo } from "@/components/brand/Logo";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+import { workspaceHead } from "@/lib/workspace";
+export const Route = createFileRoute("/forgot-password")({ head: () => workspaceHead("Forgot password", "Recover access to your Xenix AI account."), component: ForgotPassword });
+function ForgotPassword() { const [email, setEmail] = useState(""); const [busy, setBusy] = useState(false); const [sent, setSent] = useState(false); const [error, setError] = useState<string | null>(null); return <main className="flex min-h-dvh items-center justify-center px-5"><div className="w-full max-w-sm"><Logo /><h1 className="mt-8 text-2xl font-semibold">Forgot password?</h1>{sent ? <p role="status" className="mt-6 text-sm text-muted-foreground">If an account exists for that email, a reset link is on its way.</p> : <form className="mt-6 space-y-4" onSubmit={async (e) => { e.preventDefault(); setBusy(true); setError(null); const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` }); setBusy(false); if (error) setError("Could not send the reset email. Please try again."); else setSent(true); }}><Label htmlFor="resetEmail">Email address</Label><Input id="resetEmail" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /><Button type="submit" className="w-full" disabled={busy}>{busy ? "Sending…" : "Send reset link"}</Button>{error && <p role="alert" className="text-sm text-destructive">{error}</p>}</form>}<Button asChild variant="link" className="mt-5 px-0"><Link to="/auth">Back to sign in</Link></Button></div></main>; }

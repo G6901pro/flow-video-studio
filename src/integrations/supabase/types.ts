@@ -78,7 +78,6 @@ export type Database = {
           kind: string
           model: string
           prompt: string
-          resolution: string
           style: string | null
           user_id: string
         }
@@ -91,7 +90,6 @@ export type Database = {
           kind?: string
           model: string
           prompt: string
-          resolution?: string
           style?: string | null
           user_id: string
         }
@@ -104,7 +102,6 @@ export type Database = {
           kind?: string
           model?: string
           prompt?: string
-          resolution?: string
           style?: string | null
           user_id?: string
         }
@@ -238,7 +235,6 @@ export type Database = {
           generation_id: string | null
           id: string
           prompt: string
-          resolution: string
           status: string
           user_id: string
         }
@@ -250,7 +246,6 @@ export type Database = {
           generation_id?: string | null
           id: string
           prompt: string
-          resolution?: string
           status?: string
           user_id: string
         }
@@ -262,7 +257,6 @@ export type Database = {
           generation_id?: string | null
           id?: string
           prompt?: string
-          resolution?: string
           status?: string
           user_id?: string
         }
